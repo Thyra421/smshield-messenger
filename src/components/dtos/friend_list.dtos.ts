@@ -1,8 +1,5 @@
-export class FriendDTO {
-    id: string
-    name: string
-}
+import { UserDTO } from "./user.dtos";
 
 export class FriendListDTO {
-    friends: FriendDTO[]
+    friends: UserDTO[]
 }

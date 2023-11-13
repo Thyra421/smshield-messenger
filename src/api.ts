@@ -10,6 +10,7 @@ import { MessageResolver } from './resolvers/message.resolver'
 import { connectToTheDatabase } from './database/database.connect'
 import * as dotenv from "dotenv";
 import { friendListRouter } from './routers/friend_list.router'
+import { userRouter } from './routers/user.router'
 
 dotenv.config();
 
@@ -39,3 +40,5 @@ wss.on('connection', (socket: WebSocket) => {
 app.get("/", (req, res) => { res.send("OK") })
 
 app.use("/friend-list", friendListRouter)
+
+app.use("/user", userRouter)

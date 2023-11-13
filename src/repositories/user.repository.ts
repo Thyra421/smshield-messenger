@@ -1,3 +1,4 @@
+import { UserDTO } from "../components/dtos/user.dtos";
 import { UserModel } from "../database/models/user.model";
 
 export class UserRepository {
@@ -10,10 +11,11 @@ export class UserRepository {
         }
     }
 
-    static async findMany(filter: string) {
+    static async findMany(filter: string): Promise<UserDTO[]> {
         try {
-            const friendList = await UserModel.find({ name: { $regex: filter, $options: 'i' } });
-            return friendList;
+            const result = await UserModel.aggregate([{ $match: { name: { $regex: filter, $options: 'i' } } }, { $project: { "name": 1, "_id": 1 } }]);
+            const users: UserDTO[] = result.map(u => { return { id: u._id.toString(), name: u.name } })
+            return users;
         } catch (_) {
             return null;
         }
