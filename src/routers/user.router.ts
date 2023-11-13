@@ -19,6 +19,7 @@ userRouter.get("/", async (req: Request, res: Response) => {
     const friendList: FriendListDTO = await FriendListRepository.findOne(id)
 
     const nonFriends = users.filter(user => {
+        if (user.id === id) return false
         const index = friendList.friends.findIndex(f => {
             return f.id === user.id;
         })
