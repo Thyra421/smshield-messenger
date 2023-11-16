@@ -1,5 +1,4 @@
 import WebSocket from "ws"
-import { EntityHelper } from "../helpers/entity.helper"
 import { MessageBase } from "./messages/base.message"
 
 class Client {

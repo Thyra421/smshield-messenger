@@ -1,16 +1,25 @@
-// import { Schema, Types, model } from "mongoose"
-// import { IMessageModel, Message } from "./message.model"
+import { Schema, Types, model } from "mongoose"
 
-// interface IChatModel {
-//     id: Types.ObjectId
-//     id2: Types.ObjectId
-//     messages: IMessageModel[]
-// }
+export type Message = {
+    content: string
+    date: Date
+    from: Types.ObjectId
+}
 
-// const chatSchema = new Schema<IChatModel>({
-//     id: { type: Schema.Types.ObjectId, required: true },
-//     id2: { type: Schema.Types.ObjectId, required: true },
-//     messages: { type: [Message.schema], required: true, default: [] }
-// })
+type Chat = {
+    ids: Types.ObjectId[]
+    messages: Message[]
+}
 
-// export const Chat = model<IChatModel>('Chat', chatSchema);
+const messageSchema = new Schema<Message>({
+    content: { type: Schema.Types.String, required: true },
+    date: { type: Schema.Types.Date, required: true },
+    from: { type: Schema.Types.ObjectId, required: true },
+})
+
+const chatSchema = new Schema<Chat>({
+    ids: { type: [Schema.Types.ObjectId], required: true },
+    messages: { type: [messageSchema], required: true, default: [] }
+})
+
+export const ChatModel = model<Chat>('Chat', chatSchema);

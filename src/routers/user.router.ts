@@ -3,8 +3,8 @@ import { ResponseHelper } from "../helpers/response.helper";
 import { AuthorizationMiddleware } from "../middlewares/authorization.middleware";
 import { UserRepository } from "../repositories/user.repository";
 import { FriendListRepository } from "../repositories/friend_list.repository";
-import { UserDTO } from "../components/dtos/user.dtos";
-import { FriendListDTO } from "../components/dtos/friend_list.dtos";
+import { UserDTO } from "../components/dtos/user.dto";
+import { FriendListDTO } from "../components/dtos/friend_list.dto";
 
 export const userRouter: Router = express.Router();
 

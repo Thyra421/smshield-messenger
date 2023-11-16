@@ -1,11 +1,23 @@
-import { UserDTO } from "../components/dtos/user.dtos";
+import { Types } from "mongoose";
+import { UserDTO } from "../components/dtos/user.dto";
 import { UserModel } from "../database/models/user.model";
 
 export class UserRepository {
     static async findOne(email: string) {
         try {
-            const friendList = await UserModel.findOne({ email: email });
-            return friendList;
+            const user = await UserModel.findOne({ email: email });
+
+            return user;
+        } catch (_) {
+            return null;
+        }
+    }
+
+    static async findOneById(id: string) {
+        try {
+            const user = await UserModel.findOne({ _id: new Types.ObjectId(id) });
+
+            return user;
         } catch (_) {
             return null;
         }
@@ -13,8 +25,12 @@ export class UserRepository {
 
     static async findMany(filter: string): Promise<UserDTO[]> {
         try {
-            const result = await UserModel.aggregate([{ $match: { name: { $regex: filter, $options: 'i' } } }, { $project: { "name": 1, "_id": 1 } }]);
+            const result = await UserModel.aggregate([
+                { $match: { name: { $regex: filter, $options: 'i' } } },
+                { $project: { "name": 1, "_id": 1 } }]);
+
             const users: UserDTO[] = result.map(u => { return { id: u._id.toString(), name: u.name } })
+
             return users;
         } catch (_) {
             return null;

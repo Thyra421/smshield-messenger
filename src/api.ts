@@ -11,6 +11,7 @@ import { connectToTheDatabase } from './database/database.connect'
 import * as dotenv from "dotenv";
 import { friendListRouter } from './routers/friend_list.router'
 import { userRouter } from './routers/user.router'
+import { messengerRouter } from './routers/messenger.router'
 
 dotenv.config();
 
@@ -42,3 +43,7 @@ app.get("/", (req, res) => { res.send("OK") })
 app.use("/friend-list", friendListRouter)
 
 app.use("/user", userRouter)
+
+app.use("/messenger", messengerRouter)
+
+app.get("/populate",)

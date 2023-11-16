@@ -1,7 +1,7 @@
-import { Aggregate, Types } from "mongoose";
+import { Types } from "mongoose";
 import { FriendListModel } from "../database/models/friend_list.model";
-import { FriendListDTO } from "../components/dtos/friend_list.dtos";
-import { UserDTO } from "../components/dtos/user.dtos";
+import { FriendListDTO } from "../components/dtos/friend_list.dto";
+import { UserDTO } from "../components/dtos/user.dto";
 
 export class FriendListRepository {
     static async exists(id: string) {
@@ -22,7 +22,7 @@ export class FriendListRepository {
             ])
 
             if (results == null || results.length == 0)
-                return null;
+                return { friends: [] };
 
             const friends: UserDTO[] = results[0].friends.map(f => {
                 const userDTO: UserDTO = { id: f._id.toString(), name: f.name }
