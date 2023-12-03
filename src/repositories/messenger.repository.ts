@@ -21,7 +21,9 @@ export class MessengerRepository {
             if (results == null || results.length == 0)
                 return { chats: [] };
 
-            const chats: ChatPreviewDTO[] = await Promise.all(results.map(async m => {
+            const validResults = results.filter(r => r.messages.length > 0)
+
+            const chats: ChatPreviewDTO[] = await Promise.all(validResults.map(async m => {
                 const otherId: string = m.ids.find(i => i.toString() != id).toString()
                 const lastMessage: Message = m.messages[m.messages.length - 1]
                 const other = await UserRepository.findOneById(otherId)
@@ -30,7 +32,8 @@ export class MessengerRepository {
 
                 return messagePreview
             }))
-            const messenger: MessengerDTO = { chats: chats }
+            const sortedChats = chats.sort((a, b) => b.lastMessageDate.getTime() - a.lastMessageDate.getTime());
+            const messenger: MessengerDTO = { chats: sortedChats }
 
             return messenger
         } catch (_) {
@@ -69,19 +72,18 @@ export class MessengerRepository {
         }
     }
 
-    static async add(id: string, otherId: string) {
+    static async add(id: string, otherId: string, content: string): Promise<Message> | null {
         try {
             const ids = [new Types.ObjectId(id), new Types.ObjectId(otherId)]
 
-            const messages: Message[] = [
-                { content: "bonjour monsieur le professeur, mon fils a recu des messages menacants de la part de son camarade Thierry. pouvez vous reagir dans les plus brefs delais svp", date: new Date(2023, 7, 26), from: new Types.ObjectId(id) },
-                { content: "bonjour. la situation a été regularisée. MERCI SM SHIELD", date: new Date(2023, 7, 26), from: new Types.ObjectId(otherId) }
-            ]
+            const message: Message =
+                { "content": content, date: new Date(Date.now()), from: new Types.ObjectId(id) }
 
-            const result = await ChatModel.findOneAndUpdate({ ids: ids }, { $push: { messages: messages } });
-            return result != null;
+            const result = await ChatModel.findOneAndUpdate({ ids: { $all: ids } }, { $push: { messages: message } });
+
+            return result != null ? message : null;
         } catch (_) {
-            return false;
+            return null;
         }
     }
 }

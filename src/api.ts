@@ -5,21 +5,20 @@ import { WebSocketServer, WebSocket } from 'ws'
 import { createServer } from 'http'
 import { SERVER_PORT } from './config/config'
 import { Client } from './components/client'
-import { Session } from './components/session'
-import { MessageResolver } from './resolvers/message.resolver'
 import { connectToTheDatabase } from './database/database.connect'
 import * as dotenv from "dotenv";
 import { friendListRouter } from './routers/friend_list.router'
 import { userRouter } from './routers/user.router'
 import { messengerRouter } from './routers/messenger.router'
+import { session } from './components/session'
+import { UserRepository } from './repositories/user.repository'
+import { Types } from 'mongoose'
 
 dotenv.config();
 
 const app: express.Application = express().use(cors()).use(bodyParser.json())
 const server = createServer(app)
 const wss: WebSocketServer = new WebSocketServer({ server: server })
-const session: Session = new Session()
-const messageResolver: MessageResolver = new MessageResolver(session)
 
 connectToTheDatabase();
 server.listen(SERVER_PORT)
@@ -31,10 +30,13 @@ wss.on('connection', (socket: WebSocket) => {
         session.Remove(client)
     })
 
-    socket.on('message', message => {
-        const jsonMessage = JSON.parse(message.toString())
-
-        messageResolver.resolve(client, jsonMessage)
+    socket.on('message', async message => {
+        try {
+            client.Identify(message.toString())
+        }
+        catch (e) {
+            console.log("Invalid message")
+        }
     })
 })
 
@@ -45,5 +47,3 @@ app.use("/friend-list", friendListRouter)
 app.use("/user", userRouter)
 
 app.use("/messenger", messengerRouter)
-
-app.get("/populate",)

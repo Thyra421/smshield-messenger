@@ -26,4 +26,4 @@ class Session {
     }
 }
 
-export { Session }
+export const session = new Session()

@@ -1,5 +1,6 @@
 import WebSocket from "ws"
 import { MessageBase } from "./messages/base.message"
+import { MessageNotificationDTO } from "./dtos/message_notification.dto"
 
 class Client {
     id: string
@@ -9,8 +10,7 @@ class Client {
         this.socket = socket
     }
 
-    Send(type: string, body: MessageBase) {
-        const message = { "type": type, body: body }
+    Send(message: MessageNotificationDTO) {
         this.socket.send(JSON.stringify(message))
     }
 

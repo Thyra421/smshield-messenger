@@ -1,41 +1,42 @@
-import { Client } from "../components/client";
-import { MessageIdentify } from "../components/messages/identify.message";
-import { MessageMessage } from "../components/messages/message.message";
-import { Session } from "../components/session";
+// import { Client } from "../components/client";
+// import { MessageNotificationDTO } from "../components/dtos/message_notification.dto";
+// import { MessageDTO } from "../components/dtos/messenger.dto";
+// import { MessageIdentify } from "../components/messages/identify.message";
+// import { MessageMessage } from "../components/messages/message.message";
+// import { session } from "../components/session";
 
-export class MessageResolver {
-    readonly session: Session
+// class MessageResolver {
+//     private onIdentify(client: Client, identify: MessageIdentify) {
+//         client.Identify(identify.id)
+//     }
 
-    constructor(session: Session) {
-        this.session = session
-    }
+//     private onMessage(client: Client, message: MessageMessage) {
+//         const recipent = session.Find(message.id)
 
-    private onIdentify(client: Client, identify: MessageIdentify) {
-        client.Identify(identify.id)
-    }
+//         const messageDTO: MessageDTO = { "content": message.content, "date": new Date(Date.now()), "isMine": false }
 
-    private onMessage(client: Client, message: MessageMessage) {
-        const recipent = this.session.Find(message.id)
-        const body: MessageMessage = { id: client.id, content: message.content }
-        recipent?.Send("message", body)
-    }
+//         const response: MessageNotificationDTO = { "id": client.id, "content": messageDTO }
 
-    resolve(client: Client, jsonMessage) {
-        const type: string = jsonMessage['type']
-        const body = jsonMessage['body']
+//         recipent?.Send(response)
+//     }
 
-        if (type === 'identify') {
-            this.onIdentify(client, body)
-            return
-        }
+//     resolve(client: Client, jsonMessage: any) {
+//         const type: string = jsonMessage['type']
 
-        if (client.id === null)
-            return
+//         if (type === 'identify') {
+//             this.onIdentify(client, jsonMessage)
+//             return
+//         }
 
-        switch (type) {
-            case ("message"):
-                this.onMessage(client, body)
-                break
-        }
-    }
-}
+//         if (client.id === null)
+//             return
+
+//         switch (type) {
+//             case ("message"):
+//                 this.onMessage(client, jsonMessage)
+//                 break
+//         }
+//     }
+// }
+
+// export const messageResolver: MessageResolver = new MessageResolver()

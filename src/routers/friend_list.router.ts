@@ -3,6 +3,7 @@ import { FriendListRepository } from "../repositories/friend_list.repository";
 import { ResponseHelper } from "../helpers/response.helper";
 import { AuthorizationMiddleware } from "../middlewares/authorization.middleware";
 import { FriendListMiddleware } from "../middlewares/friend_list.middleware";
+import { session } from "../components/session";
 
 export const friendListRouter: Router = express.Router();
 
@@ -41,6 +42,6 @@ friendListRouter.delete("/", async (req: Request, res: Response) => {
     if (friendList == null)
         return res.status(400).send(ResponseHelper.error("Failed"))
 
-        res.send(ResponseHelper.success("OK"))
+    res.send(ResponseHelper.success("OK"))
 
 })
