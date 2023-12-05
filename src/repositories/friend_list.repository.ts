@@ -29,7 +29,8 @@ export class FriendListRepository {
                 return userDTO
             })
 
-            const friendList: FriendListDTO = { friends: friends }
+            const sortedFriends: UserDTO[] = friends.slice().sort((a, b) => a.name.localeCompare(b.name))
+            const friendList: FriendListDTO = { friends: sortedFriends }
 
             return friendList
         } catch (_) {

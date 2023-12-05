@@ -11,8 +11,6 @@ import { friendListRouter } from './routers/friend_list.router'
 import { userRouter } from './routers/user.router'
 import { messengerRouter } from './routers/messenger.router'
 import { session } from './components/session'
-import { UserRepository } from './repositories/user.repository'
-import { Types } from 'mongoose'
 
 dotenv.config();
 

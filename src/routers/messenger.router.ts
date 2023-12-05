@@ -43,7 +43,6 @@ messengerRouter.post("/chat/:id", MessengerMiddleware.createIfNotExists, async (
     res.send(ResponseHelper.success("OK"))
 })
 
-
 messengerRouter.get("/chat/:id", MessengerMiddleware.createIfNotExists, async (req: Request, res: Response) => {
     const id: string = res.locals.id
     const otherId = req.params.id;
