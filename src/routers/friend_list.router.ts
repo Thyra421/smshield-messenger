@@ -26,10 +26,14 @@ friendListRouter.post("/", async (req: Request, res: Response) => {
 
     const status = await FriendListRepository.addOne(id, friendID)
 
-    if (status != true)
+    if (!status)
         return res.status(400).send(ResponseHelper.error("Failed"))
 
+    if (!await FriendListRepository.exists(friendID)) {
+        await FriendListRepository.create(friendID)
+    }
     await FriendListRepository.addOne(friendID, id)
+
     res.send(ResponseHelper.success("OK"))
 })
 
@@ -39,9 +43,13 @@ friendListRouter.delete("/", async (req: Request, res: Response) => {
 
     const friendList = await FriendListRepository.removeOne(id, friendID)
 
-    if (friendList == null)
+    if (!friendList)
         return res.status(400).send(ResponseHelper.error("Failed"))
 
+    if (!await FriendListRepository.exists(friendID)) {
+        await FriendListRepository.create(friendID)
+    }
     await FriendListRepository.removeOne(friendID, id)
+
     res.send(ResponseHelper.success("OK"))
 })

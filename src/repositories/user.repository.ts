@@ -31,7 +31,9 @@ export class UserRepository {
 
             const users: UserDTO[] = result.map(u => { return { id: u._id.toString(), name: u.name } })
 
-            return users;
+            const sortedUsers: UserDTO[] = users.slice().sort((a, b) => a.name.localeCompare(b.name))
+
+            return sortedUsers;
         } catch (_) {
             return null;
         }
